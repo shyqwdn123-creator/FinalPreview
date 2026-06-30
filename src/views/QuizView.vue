@@ -422,6 +422,18 @@
       </div>
     </div>
   </div>
+
+  <!-- 退出确认弹窗 -->
+  <ConfirmModal
+    v-if="showExitConfirm"
+    title="退出答题"
+    message="确定要退出答题吗？进度已自动保存，可下次继续。"
+    confirm-text="退出"
+    cancel-text="继续答题"
+    type="info"
+    @confirm="confirmExit"
+    @cancel="showExitConfirm = false"
+  />
 </template>
 
 <script setup>
@@ -439,6 +451,7 @@ import EssayQuestion from '../components/EssayQuestion.vue'
 import QuestionNav from '../components/QuestionNav.vue'
 import AiPanel from '../components/AiPanel.vue'
 import ModeSelector from '../components/ModeSelector.vue'
+import ConfirmModal from '../components/ConfirmModal.vue'
 
 const props = defineProps({ bankId: String })
 const route = useRoute()
@@ -447,6 +460,8 @@ const bankStore = useBankStore()
 const quizStore = useQuizStore()
 const historyStore = useHistoryStore()
 const favoriteStore = useFavoriteStore()
+
+const showExitConfirm = ref(false)
 
 const showNoteDrawer = ref(false)
 const showMobileNav = ref(false)
@@ -594,10 +609,13 @@ async function finishQuiz() {
 }
 
 async function exitQuiz() {
-  if (confirm('确定要退出答题吗？进度已自动保存，可下次继续。')) {
-    await quizStore.persistSession({ bankName: bank.value?.name, score: quizStore.finalScore, correctCount: quizStore.correctCount, wrongCount: quizStore.wrongCount, totalQuestions: quizStore.totalQuestions, duration: quizStore.duration, wrongQuestions: buildWrongQuestions() })
-    router.push('/')
-  }
+  showExitConfirm.value = true
+}
+
+async function confirmExit() {
+  showExitConfirm.value = false
+  await quizStore.persistSession({ bankName: bank.value?.name, score: quizStore.finalScore, correctCount: quizStore.correctCount, wrongCount: quizStore.wrongCount, totalQuestions: quizStore.totalQuestions, duration: quizStore.duration, wrongQuestions: buildWrongQuestions() })
+  router.push('/')
 }
 
 function handleBatchDelete() {
