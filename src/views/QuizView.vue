@@ -615,7 +615,7 @@ async function exitQuiz() {
 async function confirmExit() {
   showExitConfirm.value = false
   await quizStore.persistSession({ bankName: bank.value?.name, score: quizStore.finalScore, correctCount: quizStore.correctCount, wrongCount: quizStore.wrongCount, totalQuestions: quizStore.totalQuestions, duration: quizStore.duration, wrongQuestions: buildWrongQuestions() })
-  router.push('/')
+  await router.push('/')
 }
 
 function handleBatchDelete() {
@@ -681,6 +681,7 @@ onMounted(async () => {
   const b = bank.value
   if (!b) {
     quizLoading.value = false
+    router.push('/')
     return
   }
   // 尝试加载上次的答题进度
