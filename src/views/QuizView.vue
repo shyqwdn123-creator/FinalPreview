@@ -526,17 +526,17 @@ function toggleShuffle() {
 
 function handleAnswer(answer) {
   quizStore.submitAnswer(answer)
-  quizStore.persistSession({ bankName: bank.value?.name, score: quizStore.finalScore, correctCount: quizStore.correctCount, wrongCount: quizStore.wrongCount, totalQuestions: quizStore.totalQuestions, duration: quizStore.duration, wrongQuestions: buildWrongQuestions() })
+  quizStore.persistSession()
 }
 
 function nextQuestion() {
   quizStore.nextQuestion()
-  quizStore.persistSession({ bankName: bank.value?.name, score: quizStore.finalScore, correctCount: quizStore.correctCount, wrongCount: quizStore.wrongCount, totalQuestions: quizStore.totalQuestions, duration: quizStore.duration, wrongQuestions: buildWrongQuestions() })
+  quizStore.persistSession()
 }
 
 function prevQuestion() {
   quizStore.prevQuestion()
-  quizStore.persistSession({ bankName: bank.value?.name, score: quizStore.finalScore, correctCount: quizStore.correctCount, wrongCount: quizStore.wrongCount, totalQuestions: quizStore.totalQuestions, duration: quizStore.duration, wrongQuestions: buildWrongQuestions() })
+  quizStore.persistSession()
 }
 
 const isCurrentFav = computed(() => {
@@ -614,7 +614,7 @@ async function exitQuiz() {
 
 async function confirmExit() {
   showExitConfirm.value = false
-  await quizStore.persistSession({ bankName: bank.value?.name, score: quizStore.finalScore, correctCount: quizStore.correctCount, wrongCount: quizStore.wrongCount, totalQuestions: quizStore.totalQuestions, duration: quizStore.duration, wrongQuestions: buildWrongQuestions() })
+  await quizStore.persistSession()
   await router.push('/')
 }
 
