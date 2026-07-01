@@ -209,48 +209,25 @@ app.delete('/api/history', (req, res) => {
   res.json({ success: true })
 })
 
-// PUT /api/history/session — 退出时保存/更新练习记录（UPSERT，以 bankId+mode 为键）
+// PUT /api/history/session — 退出时保存练习记录（每次新增一条，不覆盖）
 app.put('/api/history/session', (req, res) => {
   const { bankId, bankName, mode, score, correctCount, wrongCount, totalQuestions, duration, answers, wrongQuestionIds, wrongQuestions } = req.body
   if (!bankId) return res.status(400).json({ error: 'bankId is required' })
   const now = new Date().toISOString()
 
-  const existing = db.prepare(
-    'SELECT id FROM history WHERE bankId = ? AND mode = ? ORDER BY date DESC LIMIT 1'
-  ).get(bankId, mode || 'practice')
-
-  if (existing) {
-    db.prepare(`
-      UPDATE history SET
-        bankName = ?, mode = ?, score = ?, correctCount = ?, wrongCount = ?,
-        totalQuestions = ?, duration = ?, answers = ?, wrongQuestionIds = ?,
-        wrongQuestions = ?, date = ?
-      WHERE id = ?
-    `).run(
-      bankName || '', mode || 'practice', score ?? 0, correctCount ?? 0, wrongCount ?? 0,
-      totalQuestions ?? 0, duration ?? 0,
-      JSON.stringify(answers || {}),
-      JSON.stringify(wrongQuestionIds || []),
-      JSON.stringify(wrongQuestions || []),
-      now,
-      existing.id
-    )
-    res.json({ id: existing.id, updated: true, date: now })
-  } else {
-    const stmt = db.prepare(`
-      INSERT INTO history (bankId, bankName, mode, score, correctCount, wrongCount, totalQuestions, duration, answers, wrongQuestionIds, wrongQuestions, date)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `)
-    const result = stmt.run(
-      bankId, bankName || '', mode || 'practice', score ?? 0, correctCount ?? 0, wrongCount ?? 0,
-      totalQuestions ?? 0, duration ?? 0,
-      JSON.stringify(answers || {}),
-      JSON.stringify(wrongQuestionIds || []),
-      JSON.stringify(wrongQuestions || []),
-      now
-    )
-    res.json({ id: result.lastInsertRowid, updated: false, date: now })
-  }
+  const stmt = db.prepare(`
+    INSERT INTO history (bankId, bankName, mode, score, correctCount, wrongCount, totalQuestions, duration, answers, wrongQuestionIds, wrongQuestions, date)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `)
+  const result = stmt.run(
+    bankId, bankName || '', mode || 'practice', score ?? 0, correctCount ?? 0, wrongCount ?? 0,
+    totalQuestions ?? 0, duration ?? 0,
+    JSON.stringify(answers || {}),
+    JSON.stringify(wrongQuestionIds || []),
+    JSON.stringify(wrongQuestions || []),
+    now
+  )
+  res.json({ id: result.lastInsertRowid, date: now })
 })
 
 // ===== FAVORITES =====
