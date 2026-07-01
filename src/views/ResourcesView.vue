@@ -80,7 +80,7 @@
       </div>
 
       <div class="resource-card card" @click="openResource('memory-management')">
-        <div class="resource-icon" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa;">
+        <div class="resource-icon">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <rect x="2" y="4" width="20" height="16" rx="2"/>
             <line x1="2" y1="10" x2="22" y2="10"/>
@@ -101,7 +101,7 @@
       </div>
 
       <div class="resource-card card" @click="openResource('memory-recycle')">
-        <div class="resource-icon" style="background: rgba(244, 63, 94, 0.1); color: #f87171;">
+        <div class="resource-icon">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <rect x="2" y="2" width="20" height="20" rx="3"/>
             <line x1="2" y1="8" x2="22" y2="8"/>
@@ -123,7 +123,7 @@
       </div>
 
       <div class="resource-card card" @click="openResource('leaders')">
-        <div class="resource-icon" style="background: rgba(220, 38, 38, 0.1); color: #f87171;">
+        <div class="resource-icon">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M3 21h18M3 7h18M3 14h18M5 7v10M9 7v10M13 7v10M17 7v10M19 7v10"/>
           </svg>
@@ -139,7 +139,7 @@
       </div>
 
       <div class="resource-card card" @click="openResource('2026-06-28-qa')">
-        <div class="resource-icon" style="background: rgba(34, 197, 94, 0.1); color: #22c55e;">
+        <div class="resource-icon">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M9 11l3 3L22 4"/>
             <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
