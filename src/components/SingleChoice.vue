@@ -42,6 +42,7 @@
           incorrect: submitted && selectedAnswer === option.label && option.label !== question.answer
         }"
         @click="selectOption(option.label)"
+        @dblclick="dblSelect(option.label)"
         :disabled="submitted || batchMode"
       >
         <span class="option-dot"></span>
@@ -104,7 +105,7 @@ const props = defineProps({
   batchMode: { type: Boolean, default: false }
 })
 
-const emit = defineEmits(['answer', 'select'])
+const emit = defineEmits(['answer', 'select', 'next'])
 
 const favoriteStore = useFavoriteStore()
 const quizStore = useQuizStore()
@@ -157,9 +158,17 @@ watch(() => props.question.id, () => {
 function selectOption(label) {
   if (!submitted.value) {
     selectedAnswer.value = label
-    // 实时将答案同步到 quizStore，确保"完成答题"或"下一题"时能记录错题
     emit('answer', label)
   }
+}
+
+// 双击选项：选中 → 提交 → 触发翻页
+function dblSelect(label) {
+  if (submitted.value || batchMode) return
+  selectedAnswer.value = label
+  submitted.value = true
+  emit('answer', label)
+  emit('next')
 }
 
 function submitAnswer() {
