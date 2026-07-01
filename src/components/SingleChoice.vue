@@ -115,6 +115,8 @@ const selectedAnswer = ref(null)
 const submitted = ref(false)
 const favBtnRef = ref(null)
 const favAnim = ref(false)
+let nextTimer = null
+let skipNext = false
 
 const isFav = computed(() => {
   return favoriteStore.isFavorited(quizStore.bankId, props.question.id)
@@ -153,18 +155,32 @@ onMounted(() => {
 watch(() => props.question.id, () => {
   selectedAnswer.value = null
   submitted.value = false
+  clearTimeout(nextTimer)
+  skipNext = false
 }, { immediate: true })
 
 function selectOption(label) {
   if (!submitted.value) {
     selectedAnswer.value = label
     emit('answer', label)
+    // 单击：延迟翻页，等待 dblclick 先触发，如果被 dblclick 取消则不翻页
+    skipNext = false
+    clearTimeout(nextTimer)
+    nextTimer = setTimeout(() => {
+      if (!skipNext && !submitted.value) {
+        submitted.value = true
+        emit('answer', selectedAnswer.value)
+        emit('next')
+      }
+    }, 250)
   }
 }
 
-// 双击选项：选中 → 提交 → 触发翻页
+// 双击选项：立即翻页，取消单击的延迟翻页
 function dblSelect(label) {
   if (submitted.value || batchMode) return
+  clearTimeout(nextTimer)
+  skipNext = true
   selectedAnswer.value = label
   submitted.value = true
   emit('answer', label)
@@ -173,6 +189,8 @@ function dblSelect(label) {
 
 function submitAnswer() {
   if (selectedAnswer.value) {
+    clearTimeout(nextTimer)
+    skipNext = true
     submitted.value = true
     emit('answer', selectedAnswer.value)
   }
