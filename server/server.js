@@ -415,9 +415,11 @@ app.get('/api/notes/quiz', (req, res) => {
 app.get('/api/notes/:bankId/:questionId', (req, res) => {
   const bankId = Number(req.params.bankId)
   const questionId = Number(req.params.questionId)
+  console.log('[GET /api/notes] bankId=', bankId, 'questionId=', questionId, 'types:', typeof bankId, typeof questionId)
   const row = db.prepare(
     'SELECT * FROM notes WHERE bankId = ? AND questionId = ?'
   ).get(bankId, questionId)
+  console.log('[GET /api/notes] row:', row ? { content: row.content?.substring(0, 50), contentHasNewline: row.content?.includes('\n') } : null)
   if (!row) return res.json(null)
   res.json(row)
 })
@@ -464,6 +466,7 @@ app.post('/api/notes', (req, res) => {
     return res.status(400).json({ error: 'bankId and questionId are required' })
   }
   const now = new Date().toISOString()
+  console.log('[POST /api/notes] saving bankId=', bankId, 'questionId=', questionId, 'content length=', (content || '').length, 'has newline:', (content || '').includes('\n'))
   const stmt = db.prepare(`
     INSERT INTO notes (bankId, questionId, content, createdAt, updatedAt)
     VALUES (?, ?, ?, ?, ?)
@@ -475,6 +478,7 @@ app.post('/api/notes', (req, res) => {
   const row = db.prepare(
     'SELECT * FROM notes WHERE bankId = ? AND questionId = ?'
   ).get(bankId, questionId)
+  console.log('[POST /api/notes] saved, row content has newline:', row?.content?.includes('\n'))
   res.json(row)
 })
 
