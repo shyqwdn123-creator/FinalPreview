@@ -114,6 +114,7 @@ const bankStore = useBankStore()
 const selectedAnswer = ref(null)
 const submitted = ref(false)
 const favBtnRef = ref(null)
+let dblClickPending = false
 
 const isFav = computed(() => {
   return favoriteStore.isFavorited(quizStore.bankId, props.question.id)
@@ -150,6 +151,7 @@ onMounted(() => {
 watch(() => props.question.id, () => {
   selectedAnswer.value = null
   submitted.value = false
+  dblClickPending = false
 }, { immediate: true })
 
 function selectOption(label) {
@@ -162,14 +164,16 @@ function selectOption(label) {
 // 双击选项：选中 → 提交 → 翻页
 function dblSelect(label) {
   if (submitted.value || batchMode) return
+  dblClickPending = true
   selectedAnswer.value = label
   submitted.value = true
   emit('answer', label)
   emit('next')
+  setTimeout(() => { dblClickPending = false }, 300)
 }
 
 function submitAnswer() {
-  if (selectedAnswer.value) {
+  if (selectedAnswer.value && !dblClickPending) {
     submitted.value = true
     emit('answer', selectedAnswer.value)
   }
