@@ -371,7 +371,7 @@ app.post('/api/import', (req, res) => {
 
 // GET /api/notes?bankId=xxx
 app.get('/api/notes', (req, res) => {
-  const bankId = req.query.bankId
+  const bankId = req.query.bankId ? Number(req.query.bankId) : undefined
   let rows
   if (bankId !== undefined) {
     rows = db.prepare('SELECT * FROM notes WHERE bankId = ? ORDER BY id ASC').all(bankId)
@@ -413,7 +413,8 @@ app.get('/api/notes/quiz', (req, res) => {
 
 // GET /api/notes/:bankId/:questionId
 app.get('/api/notes/:bankId/:questionId', (req, res) => {
-  const { bankId, questionId } = req.params
+  const bankId = Number(req.params.bankId)
+  const questionId = Number(req.params.questionId)
   const row = db.prepare(
     'SELECT * FROM notes WHERE bankId = ? AND questionId = ?'
   ).get(bankId, questionId)
@@ -456,8 +457,10 @@ app.post('/api/notes', (req, res, next) => {
 
 // POST /api/notes  body: { bankId, questionId, content }
 app.post('/api/notes', (req, res) => {
-  const { bankId, questionId, content } = req.body
-  if (bankId === undefined || questionId === undefined) {
+  const bankId = Number(req.body.bankId)
+  const questionId = Number(req.body.questionId)
+  const { content } = req.body
+  if (isNaN(bankId) || isNaN(questionId)) {
     return res.status(400).json({ error: 'bankId and questionId are required' })
   }
   const now = new Date().toISOString()
@@ -477,7 +480,8 @@ app.post('/api/notes', (req, res) => {
 
 // DELETE /api/notes/:bankId/:questionId
 app.delete('/api/notes/:bankId/:questionId', (req, res) => {
-  const { bankId, questionId } = req.params
+  const bankId = Number(req.params.bankId)
+  const questionId = Number(req.params.questionId)
   db.prepare('DELETE FROM notes WHERE bankId = ? AND questionId = ?')
     .run(bankId, questionId)
   res.json({ success: true })
