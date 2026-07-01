@@ -122,6 +122,22 @@
         </div>
       </div>
 
+      <div class="resource-card card" @click="openResource('leaders')">
+        <div class="resource-icon" style="background: rgba(220, 38, 38, 0.1); color: #f87171;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 21h18M3 7h18M3 14h18M5 7v10M9 7v10M13 7v10M17 7v10M19 7v10"/>
+          </svg>
+        </div>
+        <div class="resource-info">
+          <h3>党和国家领导人任期对照表</h3>
+          <p class="text-muted text-sm">邓小平至习近平，历届党代会（5年一届）与全国人大（每年例会）完整对照，含任期年份与重要节点说明。</p>
+          <div class="resource-tags">
+            <span class="tag">政治常识</span>
+            <span class="tag">历史政治</span>
+          </div>
+        </div>
+      </div>
+
       <div class="resource-card card" @click="openResource('2026-06-28-qa')">
         <div class="resource-icon" style="background: rgba(34, 197, 94, 0.1); color: #22c55e;">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>党和国家领导人任期与重要会议对照表</title>
+  <style>
+    :root {
+      --bg-primary: #0d0e1a;
+      --bg-surface: #161628;
+      --bg-card: #1a1a2e;
+      --bg-surface-raised: #1e1e38;
+      --text-primary: #e8e8f0;
+      --text-secondary: #9898b0;
+      --text-muted: #606078;
+      --accent-primary: #7c8dbd;
+      --accent-secondary: #6b8cce;
+      --border-color: #2a2a45;
+      --success: #22c55e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      padding: 2rem;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 2rem;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .legend span { display: flex; align-items: center; gap: 0.4rem; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    table {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    }
+
+    thead th {
+      background: var(--bg-surface-raised);
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 0.8rem;
+      padding: 0.75rem 0.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    thead th:first-child { text-align: left; padding-left: 1rem; }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border-color);
+      transition: background 0.1s;
+    }
+
+    tbody tr:hover { background: var(--bg-surface); }
+
+    tbody tr:last-child { border-bottom: none; }
+
+    td {
+      padding: 0.75rem 0.5rem;
+      vertical-align: top;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+    }
+
+    td:first-child { padding-left: 1rem; text-align: left; }
+
+    .leader-name {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .leader-role {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .period {
+      font-variant-numeric: tabular-nums;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    .conf-list, .npc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .conf-item, .npc-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+    }
+
+    .badge {
+      font-size: 0.65rem;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .badge-dj    { background: rgba(220, 38, 38, 0.15); color: #f87171; }
+    .badge-ds    { background: rgba(234, 179, 8, 0.15);  color: #fbbf24; }
+    .badge-dsh   { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+    .badge-dx    { background: rgba(34, 197, 94, 0.15);  color: #4ade80; }
+
+    .badge-npc   { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+
+    .note {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .current {
+      font-size: 0.65rem;
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .divider {
+      background: var(--bg-surface-raised);
+      border: none;
+      height: 1px;
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      table { font-size: 0.78rem; }
+      td, thead th { padding: 0.5rem 0.3rem; }
+      td:first-child { padding-left: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>党和国家领导人任期与重要会议对照表</h1>
+<p class="subtitle">中共全国代表大会（党代会，5年一届）&nbsp;·&nbsp;全国人民代表大会（人大，每年例会）</p>
+
+<div class="legend">
+  <span><span class="dot" style="background:#f87171;"></span>党代会</span>
+  <span><span class="dot" style="background:#c084fc;"></span>全国人大</span>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>领导人</th>
+      <th>主要任期</th>
+      <th>期间举办的党代会</th>
+      <th>期间对应的全国人大</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- 邓小平 -->
+    <tr>
+      <td>
+        <div class="leader-name">邓小平</div>
+        <div class="leader-role">实质领导核心</div>
+      </td>
+      <td>
+        <div class="period">1978年 ─ 1989年</div>
+        <div class="note">以十一届三中全会为起点，至中顾委主任卸任、退休为界</div>
+      </td>
+      <td>
+        <div class="conf-list">
+          <div class="conf-item">
+            <span class="badge badge-dj">十一大</span>
+            <span>1977年（邓此时复出）</span>
+          </div>
+          <div class="conf-item">
+            <span class="badge badge-dj">十二大</span>
+            <span>1982年</span>
+          </div>
+          <div class="conf-item">
+            <span class="badge badge-dj">十三大</span>
+            <span>1987年</span>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="npc-list">
+          <div class="npc-item">
+            <span class="badge badge-npc">五届人大</span>
+            <span>1978－1983年</span>
+          </div>
+          <div class="npc-item">
+            <span class="badge badge-npc">六届人大</span>
+            <span>1983－1988年</span>
+          </div>
+          <div class="npc-item">
+            <span class="badge badge-npc">七届人大</span>
+            <span>1988－1993年（前中期）</span>
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr><td class="divider" colspan="4"></td></tr>
+
+    <!-- 江泽民 -->
+    <tr>
+      <td>
+        <div class="leader-name">江泽民</div>
+        <div class="leader-role">党和国家领导人</div>
+      </td>
+      <td>
+        <div class="period">1993年 ─ 2003年</div>
+        <div class="note">总书记任期：1989－2002年</div>
+      </td>
+      <td>
+        <div class="conf-list">
+          <div class="conf-item">
+            <span class="badge badge-ds">十四大</span>
+            <span>1992年</span>
+          </div>
+          <div class="conf-item">
+            <span class="badge badge-ds">十五大</span>
+            <span>1997年</span>
+          </div>
+          <div class="conf-item">
+            <span class="badge badge-ds">十六大</span>
+            <span>2002年（完成总书记交接）</span>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="npc-list">
+          <div class="npc-item">
+            <span class="badge badge-npc">八届人大</span>
+            <span>1993－1998年</span>
+          </div>
+          <div class="npc-item">
+            <span class="badge badge-npc">九届人大</span>
+            <span>1998－2003年</span>
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr><td class="divider" colspan="4"></td></tr>
+
+    <!-- 胡锦涛 -->
+    <tr>
+      <td>
+        <div class="leader-name">胡锦涛</div>
+        <div class="leader-role">党和国家领导人</div>
+      </td>
+      <td>
+        <div class="period">2003年 ─ 2013年</div>
+        <div class="note">总书记任期：2002－2012年</div>
+      </td>
+      <td>
+        <div class="conf-list">
+          <div class="conf-item">
+            <span class="badge badge-dsh">十七大</span>
+            <span>2007年</span>
+          </div>
+          <div class="conf-item">
+            <span class="badge badge-dsh">十八大</span>
+            <span>2012年（完成总书记交接）</span>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="npc-list">
+          <div class="npc-item">
+            <span class="badge badge-npc">十届人大</span>
+            <span>2003－2008年</span>
+          </div>
+          <div class="npc-item">
+            <span class="badge badge-npc">十一届人大</span>
+            <span>2008－2013年</span>
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr><td class="divider" colspan="4"></td></tr>
+
+    <!-- 习近平 -->
+    <tr>
+      <td>
+        <div class="leader-name">习近平</div>
+        <div class="leader-role">党和国家领导人</div>
+      </td>
+      <td>
+        <div class="period">2013年 ─ 至今</div>
+        <div class="note">总书记任期：2012－至今</div>
+        <div class="current">● 正在进行</div>
+      </td>
+      <td>
+        <div class="conf-list">
+          <div class="conf-item">
+            <span class="badge badge-dx">十九大</span>
+            <span>2017年</span>
+          </div>
+          <div class="conf-item">
+            <span class="badge badge-dx">二十大</span>
+            <span>2022年</span>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="npc-list">
+          <div class="npc-item">
+            <span class="badge badge-npc">十二届人大</span>
+            <span>2013－2018年</span>
+          </div>
+          <div class="npc-item">
+            <span class="badge badge-npc">十三届人大</span>
+            <span>2018－2023年</span>
+          </div>
+          <div class="npc-item">
+            <span class="badge badge-npc">十四届人大</span>
+            <span>2023－2028年 <span class="current">● 进行中</span></span>
+          </div>
+        </div>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+</body>
+</html>

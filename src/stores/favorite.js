@@ -54,45 +54,29 @@ export const useFavoriteStore = defineStore('favorite', () => {
 
   async function toggleFavorite(bankId, questionId, bankName, questionData) {
     const key = makeKey(bankId, questionId)
-    const wasFavorited = favoritedKeys.value.has(key)
-    if (wasFavorited) {
-      // Optimistic remove — update local state immediately
-      favorites.value = favorites.value.filter(
-        f => !(String(f.bankId) === String(bankId) && String(f.questionId) === String(questionId))
+    if (favoritedKeys.value.has(key)) {
+      // Remove favorite
       try {
         await removeFavorite(bankId, questionId)
+        favorites.value = favorites.value.filter(
+          f => !(String(f.bankId) === String(bankId) && String(f.questionId) === String(questionId))
+        )
       } catch (e) {
-        // Revert on failure
+        console.error('取消收藏失败:', e)
+      }
+    } else {
+      // Add favorite
+      try {
+        const result = await addFavorite({ bankId, questionId, bankName, questionData })
         favorites.value.unshift({
-          id: Date.now(),
+          id: result.id,
           bankId,
           questionId,
           bankName,
           questionData,
-          createdAt: new Date().toISOString(),
+          createdAt: result.createdAt,
         })
-        console.error('取消收藏失败:', e)
-      }
-    } else {
-      // Optimistic add — update local state immediately
-      favorites.value.unshift({
-        id: Date.now(),
-        bankId,
-        questionId,
-        bankName,
-        questionData,
-        createdAt: new Date().toISOString(),
-      })
-      try {
-        const result = await addFavorite({ bankId, questionId, bankName, questionData })
-        // Update with server-assigned id
-        const local = favorites.value.find(
-          f => String(f.bankId) === String(bankId) && String(f.questionId) === String(questionId))
-        if (local) local.id = result.id
       } catch (e) {
-        // Revert on failure
-        favorites.value = favorites.value.filter(
-          f => !(String(f.bankId) === String(bankId) && String(f.questionId) === String(questionId))
         console.error('添加收藏失败:', e)
       }
     }

@@ -173,7 +173,6 @@
               :question="quizStore.currentQuestion"
               :mode="quizStore.mode"
               @answer="handleAnswer"
-              @next="nextQuestion"
             />
             <MultipleChoice
               v-else-if="quizStore.currentQuestion.type === 'multi'"

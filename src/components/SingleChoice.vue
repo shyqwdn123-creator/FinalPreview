@@ -8,7 +8,7 @@
       <button
         v-if="!batchMode"
         class="favorite-btn"
-        :class="{ favorited: isFav }"
+        :class="{ favorited: isFav, toggling: favAnim }"
         @click.stop="toggleFav"
         :title="isFav ? '取消收藏' : '收藏题目'"
         ref="favBtnRef"
@@ -42,7 +42,6 @@
           incorrect: submitted && selectedAnswer === option.label && option.label !== question.answer
         }"
         @click="selectOption(option.label)"
-        @dblclick="dblSelect(option.label)"
         :disabled="submitted || batchMode"
       >
         <span class="option-dot"></span>
@@ -105,7 +104,7 @@ const props = defineProps({
   batchMode: { type: Boolean, default: false }
 })
 
-const emit = defineEmits(['answer', 'select', 'next'])
+const emit = defineEmits(['answer', 'select'])
 
 const favoriteStore = useFavoriteStore()
 const quizStore = useQuizStore()
@@ -114,7 +113,7 @@ const bankStore = useBankStore()
 const selectedAnswer = ref(null)
 const submitted = ref(false)
 const favBtnRef = ref(null)
-let dblClickPending = false
+const favAnim = ref(false)
 
 const isFav = computed(() => {
   return favoriteStore.isFavorited(quizStore.bankId, props.question.id)
@@ -134,6 +133,7 @@ async function toggleFav() {
     const rect = favBtnRef.value.getBoundingClientRect()
     burstConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2)
   }
+  favAnim.value = true
   const bank = bankStore.allBanks.find(b => String(b.id) === String(quizStore.bankId))
   await favoriteStore.toggleFavorite(
     quizStore.bankId,
@@ -141,6 +141,7 @@ async function toggleFav() {
     bank?.name || '未知题库',
     props.question
   )
+  setTimeout(() => { favAnim.value = false }, 500)
 }
 
 onMounted(() => {
@@ -151,29 +152,18 @@ onMounted(() => {
 watch(() => props.question.id, () => {
   selectedAnswer.value = null
   submitted.value = false
-  dblClickPending = false
 }, { immediate: true })
 
 function selectOption(label) {
   if (!submitted.value) {
     selectedAnswer.value = label
+    // 实时将答案同步到 quizStore，确保"完成答题"或"下一题"时能记录错题
     emit('answer', label)
   }
 }
 
-// 双击选项：选中 → 提交 → 翻页
-function dblSelect(label) {
-  if (submitted.value || batchMode) return
-  dblClickPending = true
-  selectedAnswer.value = label
-  submitted.value = true
-  emit('answer', label)
-  emit('next')
-  setTimeout(() => { dblClickPending = false }, 300)
-}
-
 function submitAnswer() {
-  if (selectedAnswer.value && !dblClickPending) {
+  if (selectedAnswer.value) {
     submitted.value = true
     emit('answer', selectedAnswer.value)
   }
