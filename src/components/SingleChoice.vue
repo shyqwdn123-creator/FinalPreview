@@ -8,7 +8,7 @@
       <button
         v-if="!batchMode"
         class="favorite-btn"
-        :class="{ favorited: isFav, toggling: favAnim }"
+        :class="{ favorited: isFav }"
         @click.stop="toggleFav"
         :title="isFav ? '取消收藏' : '收藏题目'"
         ref="favBtnRef"
@@ -114,7 +114,6 @@ const bankStore = useBankStore()
 const selectedAnswer = ref(null)
 const submitted = ref(false)
 const favBtnRef = ref(null)
-const favAnim = ref(false)
 
 const isFav = computed(() => {
   return favoriteStore.isFavorited(quizStore.bankId, props.question.id)
@@ -134,7 +133,6 @@ async function toggleFav() {
     const rect = favBtnRef.value.getBoundingClientRect()
     burstConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2)
   }
-  favAnim.value = true
   const bank = bankStore.allBanks.find(b => String(b.id) === String(quizStore.bankId))
   await favoriteStore.toggleFavorite(
     quizStore.bankId,
@@ -142,7 +140,6 @@ async function toggleFav() {
     bank?.name || '未知题库',
     props.question
   )
-  setTimeout(() => { favAnim.value = false }, 500)
 }
 
 onMounted(() => {
