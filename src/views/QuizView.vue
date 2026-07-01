@@ -680,7 +680,7 @@ onMounted(async () => {
   favoriteStore.load()
   const b = bank.value
   if (!b) {
-    quizLoading.value = false
+    // 题库不存在，保持骨架屏直接跳转，不渲染空白
     router.push('/')
     return
   }
